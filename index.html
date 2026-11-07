@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+<meta name="theme-color" content="#9bd5ed" />
+<title>Blue Hour — A little ride by the sea</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root{--ink:#163a52;--cream:#fffaf0;--coral:#f1846c;--blue:#8cc9df;--line:rgba(35,77,99,.13)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#9bd5ed;color:var(--ink);font-family:'DM Sans',sans-serif;touch-action:none}button{font:inherit;color:inherit}#game{position:fixed;inset:0;overflow:hidden;background:linear-gradient(#8bc9e7,#d6e9e9 55%,#efcfaa)}canvas{display:block;width:100%;height:100%;outline:none}.grain{position:absolute;inset:0;pointer-events:none;opacity:.13;z-index:2;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E");mix-blend-mode:soft-light}
+.hud{position:absolute;z-index:4;inset:0;pointer-events:none;padding:clamp(16px,3vw,34px);display:flex;flex-direction:column;justify-content:space-between}.topbar{display:flex;justify-content:space-between;align-items:flex-start}.brand{display:flex;align-items:center;gap:11px}.brand-mark{width:37px;height:37px;border:1px solid rgba(255,255,255,.62);background:rgba(255,251,242,.38);backdrop-filter:blur(8px);border-radius:50%;display:grid;place-items:center;color:#fff;font-size:19px;box-shadow:0 4px 18px #3b72851f}.brand-copy{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#fff;text-shadow:0 1px 5px #47778b66}.brand-copy span{display:block;letter-spacing:.03em;text-transform:none;font-weight:500;font-size:12px;margin-top:3px;opacity:.9}.stats{display:flex;gap:10px}.stat{padding:9px 14px;background:rgba(255,250,240,.74);border:1px solid rgba(255,255,255,.65);border-radius:14px;min-width:82px;box-shadow:0 8px 26px #386b7b17;backdrop-filter:blur(12px)}.stat small{display:block;color:#72909b;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.13em}.stat strong{display:block;font:800 17px 'Manrope',sans-serif;margin-top:2px;letter-spacing:-.04em}.stat strong em{font-size:10px;font-style:normal;color:#79919a;letter-spacing:0;font-weight:600}.bottom{display:flex;align-items:flex-end;justify-content:space-between}.hint{font-size:11px;color:#fff;text-shadow:0 1px 5px #356b7b;font-weight:600;letter-spacing:.03em;padding:8px 12px;border:1px solid #ffffff66;border-radius:20px;background:#ffffff2a;backdrop-filter:blur(8px)}.pause{pointer-events:auto;border:1px solid #ffffff80;border-radius:50%;width:42px;height:42px;background:#fff9edba;backdrop-filter:blur(8px);font-size:16px;box-shadow:0 5px 18px #315d6a22;cursor:pointer}.overlay{position:absolute;z-index:5;inset:0;display:grid;place-items:center;background:linear-gradient(180deg,#2449571b,#23485834);transition:opacity .55s,visibility .55s}.overlay.hidden{opacity:0;visibility:hidden;pointer-events:none}.card{width:min(440px,calc(100vw - 36px));padding:clamp(26px,5vw,44px);text-align:center;background:rgba(255,250,240,.91);border:1px solid #fff;border-radius:28px;box-shadow:0 24px 80px #254a5938;backdrop-filter:blur(17px);position:relative;overflow:hidden}.card:before{content:'';position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,#f5bd88,#f18f7e,#7dbfd0)}.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.22em;color:#d07d6c;font-weight:700}.card h1{font:800 clamp(38px,8vw,57px)/.98 'Manrope',sans-serif;letter-spacing:-.075em;margin:15px 0 12px;color:#19465a}.card p{font-size:14px;line-height:1.6;color:#65808a;margin:0 auto 23px;max-width:320px}.card .sub{font-size:10px;color:#9aaeb0;margin-top:14px;margin-bottom:0}.primary{border:0;border-radius:999px;padding:14px 28px;background:#ed896f;color:white;font-weight:700;font-size:13px;letter-spacing:.04em;box-shadow:0 9px 19px #e57f673b;cursor:pointer;transition:transform .2s,box-shadow .2s}.primary:active{transform:translateY(2px);box-shadow:0 4px 10px #e57f673b}.keycap{display:inline-grid;place-items:center;min-width:23px;height:23px;padding:0 5px;border:1px solid #d5e0dc;border-radius:6px;background:#fff;color:#69858c;font-size:10px;font-weight:700;box-shadow:0 2px 0 #d9e3df;margin:0 2px}.mobile-controls{display:none;pointer-events:auto;position:absolute;z-index:4;left:0;right:0;bottom:max(28px,env(safe-area-inset-bottom));justify-content:space-between;padding:0 22px}.pad{width:66px;height:66px;border-radius:50%;border:1px solid #ffffffa8;background:#fff9edaa;backdrop-filter:blur(8px);box-shadow:0 6px 24px #264e5e30;display:grid;place-items:center;color:#376176;font-size:25px;user-select:none;-webkit-user-select:none;touch-action:none}.pad:active,.pad.pressed{background:#fff;transform:scale(.94)}.mobile-label{font-size:9px;letter-spacing:.1em;color:#fff;text-shadow:0 1px 4px #385d69;text-align:center;margin-top:6px;font-weight:700}.ride-label{position:absolute;left:50%;bottom:clamp(17px,3vw,30px);transform:translateX(-50%);white-space:nowrap;pointer-events:none}.toast{position:absolute;z-index:4;left:50%;top:20%;transform:translate(-50%,-10px);opacity:0;transition:.3s;background:#fff8e9e8;border:1px solid #fff;border-radius:30px;padding:10px 18px;font-size:12px;font-weight:700;color:#c87765;box-shadow:0 8px 24px #345d6730;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}.speedlines{position:absolute;inset:0;z-index:1;opacity:0;pointer-events:none;transition:opacity .3s;background:radial-gradient(ellipse at center,transparent 30%,#fff5 100%);mix-blend-mode:screen}.speedlines.on{opacity:.5}
+@media(max-width:700px){.hud{padding: max(14px,env(safe-area-inset-top)) 14px 14px}.brand-copy{font-size:9px}.brand-copy span{font-size:10px}.brand-mark{width:32px;height:32px}.stats{gap:6px}.stat{min-width:67px;padding:7px 10px;border-radius:11px}.stat strong{font-size:15px}.stat small{font-size:8px}.hint{display:none}.mobile-controls{display:flex}.ride-label{display:none}.bottom .pause{margin-left:auto}.card{border-radius:24px}.card p{font-size:13px}}
+@media(min-width:701px){.mobile-controls{display:none}}
+</style>
+</head>
+<body>
+<div id="game"><div class="speedlines" id="speedlines"></div><div class="grain"></div>
+<div class="hud"><div class="topbar"><div class="brand"><div class="brand-mark">☼</div><div class="brand-copy">BLUE HOUR<span>a little ride by the sea</span></div></div><div class="stats"><div class="stat"><small>Distance</small><strong><span id="distance">0</span> <em>m</em></strong></div><div class="stat"><small>Found</small><strong>✦ <span id="stars">0</span></strong></div></div></div><div class="bottom"><div class="hint"><span class="keycap">←</span><span class="keycap">→</span> to drift · find the little lights</div><div class="ride-label hint">A quiet road, an endless blue ✦</div><button class="pause" id="pause" aria-label="Pause ride">Ⅱ</button></div></div>
+<div class="mobile-controls"><div><button class="pad" id="left" aria-label="Steer left">‹</button><div class="mobile-label">LEFT</div></div><div><button class="pad" id="right" aria-label="Steer right">›</button><div class="mobile-label">RIGHT</div></div></div>
+<div class="toast" id="toast">A little sparkle for the road ✦</div>
+<div class="overlay" id="overlay"><div class="card"><div class="eyebrow">a seaside daydream</div><h1 id="title">Blue Hour</h1><p id="copy">Take the long way home. Follow the coast, weave through the road, and gather the little lights along the way.</p><button class="primary" id="start">Take a ride&nbsp; →</button><p class="sub" id="sub">Steer with <span class="keycap">←</span> <span class="keycap">→</span> or touch controls · the road takes care of the rest</p></div></div>
+</div>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js';
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#a5d7e8');
+scene.fog = new THREE.FogExp2('#c1e0e5', .0045);
+const camera = new THREE.PerspectiveCamera(54, innerWidth/innerHeight,.1,500);
+camera.position.set(0,5.1,10.5);
+const renderer = new THREE.WebGLRenderer({antialias:true, powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.7)); renderer.setSize(innerWidth,innerHeight); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.outputColorSpace=THREE.SRGBColorSpace; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=1.15;
+document.querySelector('#game').prepend(renderer.domElement);
+
+scene.add(new THREE.HemisphereLight('#e5f7ff','#b98d77',2.1));
+const sun=new THREE.DirectionalLight('#fff0ce',3.3); sun.position.set(-14,24,10); sun.castShadow=true; sun.shadow.mapSize.set(1024,1024); sun.shadow.camera.left=-35;sun.shadow.camera.right=35;sun.shadow.camera.top=30;sun.shadow.camera.bottom=-25; scene.add(sun);
+const fill=new THREE.DirectionalLight('#93d8f1',1.25);fill.position.set(15,9,-15);scene.add(fill);
+const mat=(color,extra={})=>new THREE.MeshToonMaterial({color,...extra});
+const mats={road:mat('#596a71'),roadShade:mat('#485c65'),sand:mat('#e6c6a0'),grass:mat('#8cae8c'),deep:mat('#64b8d0'),sea:mat('#84cddd'),foam:mat('#e5efdc'),white:mat('#f9f2df'),coral:mat('#e98a72'),dark:mat('#27485a'),metal:mat('#7c9ba0'),green:mat('#779b85'),green2:mat('#a4b993'),leaf:mat('#527c78'),wood:mat('#a77561'),flower:mat('#f5d795'),gold:mat('#ffd784'),pink:mat('#eea08b')};
+function mesh(geo,material,x=0,y=0,z=0,parent=scene){const o=new THREE.Mesh(geo,material);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;parent.add(o);return o}
+function box(w,h,d,material,x,y,z,parent=scene){return mesh(new THREE.BoxGeometry(w,h,d),material,x,y,z,parent)}
+function sphere(r,material,x,y,z,sx=1,sy=1,sz=1,parent=scene){const o=mesh(new THREE.SphereGeometry(r,14,10),material,x,y,z,parent);o.scale.set(sx,sy,sz);return o}
+function cylinder(rt,rb,h,material,x,y,z,parent=scene,segments=12){return mesh(new THREE.CylinderGeometry(rt,rb,h,segments),material,x,y,z,parent)}
+
+// A wide, quiet ribbon of asphalt and the shallow coves beside it.
+box(10,.25,600,mats.road,0,-.17,-250);box(.15,.03,600,mat('#f2d89e'),-4.92,-.025,-250);box(.15,.03,600,mat('#f2d89e'),4.92,-.025,-250);
+// lane markers, recycled as the horizon flows toward the rider
+const dashes=[];for(let i=0;i<24;i++){let d=box(.12,.025,2.4,mat('#f7e9c5'),0,-.022,-i*14-4);dashes.push(d)}
+// sea, beach edge and distant headlands
+box(260,.16,600,mats.sea,-143,-.36,-250);box(4,.13,600,mats.sand,-7.2,-.25,-250);box(70,.18,600,mats.grass,43,-.25,-250);
+// distant layered headlands, silhouettes with softened toon forms
+for(let i=0;i<12;i++){let x=-105-i*18,z=-100-i*32;let h=17+(i%4)*5;let m=sphere(1,mat(i%2?'#82b7bf':'#93c4c6'),x,h*.36,z,15,h*.55,5);m.rotation.z=(i%2?.14:-.1)}
+// Sun disk / golden reflection
+const sunDisk=sphere(8,mat('#ffe5a8',{emissive:'#ffce7b',emissiveIntensity:.25}),-35,25,-190,1,1,.12);sunDisk.castShadow=false;
+// cloud puffs
+const clouds=[];for(let i=0;i<16;i++){const group=new THREE.Group();scene.add(group);const x=-65+(i*29)%130,y=17+(i*7%12),z=-145-(i*47)%180;group.position.set(x,y,z);for(let j=0;j<4;j++)sphere(2.4,mat('#fff9ec'),(j-1.5)*2.1,Math.sin(j*2)*.45,0,1.3,.55,.72,group).castShadow=false;clouds.push(group)}
+// scattered shoreline rocks and little coastal grasses
+for(let i=0;i<34;i++){const z=-i*16-4;const x=-9.2-(i%4)*1.25;const rock=sphere(.7,mat(i%3?'#d8c09f':'#e7d0ac'),x,-.12,z,1.8,.55,.7);rock.rotation.y=i*.4;if(i%3===0){cylinder(.08,.14,1.3,mats.green,x-1,.55,z,scene,6).rotation.z=.15}}
+// looping road scenery props: pastel telephone poles, flowers and stylized round trees
+const scenery=[];
+function makeTree(x,z,kind=0){const g=new THREE.Group();scene.add(g);g.position.set(x,0,z);const trunk=cylinder(.12,.2,1.25,mats.wood,0,.62,0,g,8);const colors=[mats.green,mats.green2,mats.leaf];for(let j=0;j<4;j++){let cl=colors[(kind+j)%3];let b=sphere(1,cl,(j%2-.5)*.55,1.55+j*.25,(j%3-.8)*.35,.8,.82,.8,g);b.castShadow=true}scenery.push({group:g,baseZ:z,span:430});return g}
+function makePole(x,z){const g=new THREE.Group();scene.add(g);g.position.set(x,0,z);cylinder(.08,.13,5.2,mat('#c5aa87'),0,2.6,0,g,8);box(1.7,.12,.12,mat('#c5aa87'),.4,4.8,0,g);const l=sphere(.22,mat('#fff3bc',{emissive:'#ffe6a3',emissiveIntensity:.45}),1,4.55,0,1,.7,.7,g);scenery.push({group:g,baseZ:z,span:430})}
+for(let i=0;i<15;i++){makeTree(8.7+(i%3)*1.3,-i*30-18,i%3);makePole(-8.8,-i*36-5)}
+// A few roadside cottages and colorful beach umbrellas, all simple toy-like shapes.
+function cottage(x,z){const g=new THREE.Group();scene.add(g);g.position.set(x,0,z);box(3,2.2,2.8,mat('#f5e5c8'),0,1.1,0,g);const roof=mesh(new THREE.ConeGeometry(2.5,1.5,4),mat('#d6816e'),0,2.85,0,g);roof.rotation.y=Math.PI/4;box(.65,1.1,.12,mat('#7699a0'),-.55,.65,1.42,g);box(.6,.65,.1,mat('#98c5c6'),.7,1.35,1.43,g);scenery.push({group:g,baseZ:z,span:430})}
+for(let i=0;i<5;i++)cottage(12+(i%2)*2,-68-i*88);
+for(let i=0;i<9;i++){let z=-i*40-22,x=-12-(i%3)*2;const pole=cylinder(.07,.08,1.5,mat('#aa7867'),x,.7,z);const canopy=mesh(new THREE.ConeGeometry(1.2,.7,8),mat(i%2?'#ed9a7f':'#f2d092'),x,1.65,z);canopy.rotation.x=Math.PI;scenery.push({group:(()=>{let q=new THREE.Group();q.position.set(x,0,z);q.add(pole.clone(),canopy.clone());scene.add(q);pole.visible=false;canopy.visible=false;return q})(),baseZ:z,span:430})}
+// motorcycle assembly, built from rounded low-poly forms
+const bike=new THREE.Group();scene.add(bike);bike.position.set(0,0,1.3);
+const wheelMat=mat('#273a43'), rubber=new THREE.MeshToonMaterial({color:'#263a43'}), chrome=mat('#ccd6c8');
+function wheel(z){const w=new THREE.Group();w.position.set(0,.52,z);bike.add(w);const tire=mesh(new THREE.TorusGeometry(.49,.13,10,20),rubber,0,0,0,w);tire.rotation.y=Math.PI/2;const hub=cylinder(.19,.19,.3,mat('#bdc6b6'),0,0,0,w,16);hub.rotation.z=Math.PI/2;for(let i=0;i<8;i++){const a=i*Math.PI/4;const sp=box(.035,.68,.035,chrome,0,0,0,w);sp.position.set(0,Math.sin(a)*.32,Math.cos(a)*.32);sp.rotation.x=-a}return w}
+const backWheel=wheel(.72),frontWheel=wheel(-1.03);
+// frame and body
+const frame=box(.14,.16,1.65,mats.dark,0,.75,-.08,bike);frame.rotation.x=-.14;
+const tank=sphere(.58,mat('#e98670'),0,1.3,-.05,.73,.68,1.05,bike);tank.rotation.x=-.15;
+const tankTop=sphere(.46,mat('#f5a086'),0,1.62,-.13,.77,.23,.78,bike);
+const seat=box(.7,.19,.85,mat('#354f59'),0,1.45,.72,bike);seat.rotation.x=-.1;
+const rear=box(.6,.22,.52,mat('#e98670'),0,1.15,1.15,bike);rear.rotation.x=-.16;
+// fork / bars
+const fork1=cylinder(.075,.09,1.48,chrome,-.23,.94,-.88,bike,10);fork1.rotation.x=-.25;
+const fork2=fork1.clone();fork2.position.x=.23;bike.add(fork2);
+const handle=box(1.0,.085,.12,mats.dark,0,1.72,-.82,bike);handle.rotation.z=-.12;
+const lamp=sphere(.24,mat('#fff0c8',{emissive:'#ffe9ad',emissiveIntensity:.6}),0,1.52,-1.05,.9,.72,.55,bike);
+const lampRing=mesh(new THREE.TorusGeometry(.24,.045,8,18),mat('#91a6a4'),0,1.52,-1.02,bike);lampRing.scale.set(.9,.72,1);
+// fenders and exhaust
+const fender=mesh(new THREE.TorusGeometry(.55,.08,8,20,Math.PI),mat('#e98670'),0,.58,-1.02,bike);fender.rotation.y=Math.PI/2;
+const tail=box(.23,.12,.3,mat('#f8dfc0'),0,1.05,1.43,bike);
+cylinder(.13,.16,.9,mat('#91a7a4'),-.48,.67,.67,bike,10).rotation.x=Math.PI/2;
+// rider: soft jacket, scarf, helmet, hands
+const torso=sphere(.58,mat('#5d8390'),0,2.18,.44,.74,1.15,.62,bike);torso.rotation.x=-.25;
+const scarf=box(.74,.19,.38,mat('#f0b179'),0,2.39,.17,bike);scarf.rotation.x=-.25;
+const head=sphere(.39,mat('#f2c5a2'),0,2.9,.05,.92,1.04,.94,bike);
+const helmet=sphere(.49,mat('#ed8b72'),0,3.14,.02,1.03,.82,1,bike);
+const visor=sphere(.32,mat('#416678'),0,3.02,-.31,1,.47,.3,bike);
+const helmetstripe=box(.11,.68,.06,mat('#fff0d4'),0,3.35,-.01,bike);helmetstripe.rotation.z=-.08;
+for(const side of [-1,1]){const arm=cylinder(.16,.19,.83,mat('#5d8390'),side*.48,2.06,-.12,bike,10);arm.rotation.z=side*.54;arm.rotation.x=-.9;const hand=sphere(.16,mat('#e9bd9e'),side*.77,1.76,-.55,.9,.9,.9,bike);}
+// small tail light
+sphere(.11,mat('#ef8a76',{emissive:'#df665c',emissiveIntensity:.4}),0,1.18,1.48,1,.7,.45,bike);
+
+// Traffic hazards & the glowing little keepsakes. They move with the road; the player steers around them.
+const hazards=[], pickups=[];
+function makeHazard(i){const g=new THREE.Group();scene.add(g);const cone=mesh(new THREE.ConeGeometry(.52,1.05,8),mat(i%2?'#e98d70':'#f0bd73'),0,.55,0,g);const band=cylinder(.33,.42,.18,mat('#fff1d9'),0,.42,0,g,8);const base=cylinder(.56,.56,.14,mat('#627d81'),0,.08,0,g,8);g.position.set([-3.3,-1.2,1.3,3.25][i%4],0,-60-i*44);hazards.push({group:g,baseZ:g.position.z,x:g.position.x,hit:false});}
+for(let i=0;i<18;i++)makeHazard(i);
+function makePickup(i){const g=new THREE.Group();scene.add(g);g.position.set([-3.5,-1.75,0,1.75,3.5][i%5],1.45,-35-i*29);const outer=mesh(new THREE.TorusGeometry(.34,.08,8,16),mat('#ffdc91',{emissive:'#ffca69',emissiveIntensity:.55}),0,0,0,g);outer.rotation.y=Math.PI/2;const core=sphere(.16,mat('#fff6c8',{emissive:'#ffe397',emissiveIntensity:.9}),0,0,0,1,1,1,g);for(let j=0;j<4;j++){const sp=box(.06,.3,.06,mat('#fff4c2'),0,0,0,g);sp.rotation.z=j*Math.PI/2}pickups.push({group:g,baseZ:g.position.z,x:g.position.x,got:false,phase:i});}
+for(let i=0;i<28;i++)makePickup(i);
+// little shoreline glints
+const glints=[];for(let i=0;i<60;i++){let g=sphere(.11,mat('#f8f2d5',{emissive:'#f8d990',emissiveIntensity:.25}),-10-Math.random()*130,.2+Math.random()*1,-Math.random()*430,1,.45,1);g.castShadow=false;glints.push(g)}
+
+let running=false,paused=false,elapsed=0,travel=0,score=0,stars=0,lane=0,speed=0,toastTimer=0;
+const $=s=>document.querySelector(s),overlay=$('#overlay'),title=$('#title'),copy=$('#copy'),startBtn=$('#start');
+function startRide(){running=true;paused=false;overlay.classList.add('hidden');last=performance.now();}
+startBtn.addEventListener('click',()=>{if(title.textContent==='Lovely ride'){reset();}startRide()});
+function reset(){travel=0;score=0;stars=0;lane=0;speed=0;hazards.forEach(h=>{h.hit=false;h.group.position.z=h.baseZ});pickups.forEach(p=>{p.got=false;p.group.visible=true;p.group.position.z=p.baseZ});}
+$('#pause').addEventListener('click',()=>{if(!running)return;paused=!paused;if(paused){running=false;title.textContent='Take a breath';copy.textContent='The sea will be right here when you’re ready.';startBtn.textContent='Keep riding  →';$('#sub').textContent='Your little ride is paused';overlay.classList.remove('hidden')}else startRide()});
+const keys={};addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','a','d','A','D',' '].includes(e.key))e.preventDefault();keys[e.key.toLowerCase()]=true;if(e.key==='Escape'&&running)$('#pause').click()},{passive:false});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+function bindPad(id,key){const el=$(id);const down=e=>{e.preventDefault();keys[key]=true;el.classList.add('pressed');el.setPointerCapture?.(e.pointerId)};const up=e=>{keys[key]=false;el.classList.remove('pressed')};el.addEventListener('pointerdown',down);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);el.addEventListener('lostpointercapture',up)}bindPad('#left','arrowleft');bindPad('#right','arrowright');
+let last=performance.now();
+function showToast(){const t=$('#toast');t.classList.add('show');toastTimer=1.25}
+function update(dt){if(!running)return;elapsed+=dt;speed=THREE.MathUtils.damp(speed,1,1.2,dt);travel+=dt*14*speed;const steer=(keys.arrowright||keys.d?1:0)-(keys.arrowleft||keys.a?1:0);lane=THREE.MathUtils.clamp(lane+steer*dt*6.6,-3.95,3.95);bike.position.x=THREE.MathUtils.damp(bike.position.x,lane,.2,dt);bike.rotation.z=THREE.MathUtils.damp(bike.rotation.z,-steer*.2,.2,dt);bike.rotation.y=THREE.MathUtils.damp(bike.rotation.y,-steer*.07,.18,dt);bike.position.y=Math.sin(elapsed*8)*.025;
+for(const d of dashes){let z=((d.position.z+travel*1.3+430)%430)-430;d.position.z=z}
+for(const s of scenery){let z=((s.baseZ+travel*1.25+430)%430)-430;s.group.position.z=z}
+clouds.forEach((c,i)=>c.position.x+=Math.sin(elapsed*.08+i)*dt*.12);
+for(const h of hazards){let z=((h.baseZ+travel*1.18+430)%430)-430;h.group.position.z=z;if(z>2&&z<4.2&&!h.hit&&Math.abs(h.group.position.x-bike.position.x)<1.02){h.hit=true;speed=.35;bike.position.x+=h.group.position.x<bike.position.x?.5:-.5;showToast();setTimeout(()=>{if(running)speed=.8},550)}if(z>10)h.hit=false}
+for(const p of pickups){let z=((p.baseZ+travel*1.18+430)%430)-430;p.group.position.z=z;p.group.rotation.y+=dt*1.3;p.group.position.y=1.4+Math.sin(elapsed*2.7+p.phase)*.15;if(!p.got&&z>1.3&&z<3.1&&Math.abs(p.x-bike.position.x)<.92){p.got=true;p.group.visible=false;stars++;score+=50;$('#stars').textContent=stars;showToast()}}
+for(let i=0;i<glints.length;i++){let g=glints[i];g.position.z+=dt*16;if(g.position.z>12){g.position.z=-400-Math.random()*40;g.position.x=-11-Math.random()*130}g.material.opacity=.55+Math.sin(elapsed*2+i)*.3;g.material.transparent=true}
+$('#distance').textContent=Math.floor(travel);camera.position.x=THREE.MathUtils.damp(camera.position.x,bike.position.x*.3,.8,dt);camera.lookAt(bike.position.x*.13,1.35,-5.7);
+if(toastTimer>0){toastTimer-=dt;if(toastTimer<=0)$('#toast').classList.remove('show')}
+$('#speedlines').classList.toggle('on',speed>.95&&steer!==0);
+}
+function animate(now){requestAnimationFrame(animate);const dt=Math.min(.04,(now-last)/1000);last=now;update(dt);renderer.render(scene,camera)}requestAnimationFrame(animate);
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.7))});
+</script>
+</body>
+</html>

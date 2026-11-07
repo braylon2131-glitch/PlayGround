@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#101a20" />
+  <title>Stillwater — Scenic Ride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main id="game-shell">
+    <canvas id="scene" aria-label="Scenic motorcycle driving simulator"></canvas>
+    <div class="cinema-vignette"></div>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Stillwater home"><span class="brand-mark">S</span><span>STILLWATER<small>SCENIC RIDE</small></span></a>
+      <div class="top-center"><span class="live-dot"></span><span id="weather-label">CLEAR SKIES</span><i></i><span id="time-label">GOLDEN HOUR</span></div>
+      <button class="icon-button" id="sound-button" aria-label="Toggle sound" title="Toggle sound"><span id="sound-icon">♪</span></button>
+    </header>
+
+    <section class="intro" id="intro">
+      <div class="eyebrow"><span></span> A JOURNEY WITHOUT A DESTINATION</div>
+      <h1>Find your<br><em>own pace.</em></h1>
+      <p>Leave the noise behind. Take the long way around.</p>
+      <button id="start-button" class="start-button"><span>Begin your ride</span><b>↗</b></button>
+      <div class="intro-foot"><span>NO RUSH. NO ROUTE TO BEAT.</span><span>JUST YOU &amp; THE OPEN ROAD</span></div>
+    </section>
+
+    <section class="hud hidden" id="hud">
+      <div class="route-card">
+        <div class="route-heading"><span class="tiny-compass">⌖</span><span id="zone-name">PACIFIC COAST</span></div>
+        <div class="route-sub" id="zone-sub">THE EDGE OF EVERYTHING</div>
+        <div class="route-line"><span class="route-progress" id="route-progress"></span><span class="route-pin"></span></div>
+        <div class="route-foot"><span>SCENIC LOOP</span><span id="distance-label">00.0 KM</span></div>
+      </div>
+      <div class="ride-stats">
+        <div class="speed"><span id="speed-value">00</span><span class="unit">KM/H</span></div>
+        <div class="speed-caption">A LITTLE WIND, A LOT OF ROOM</div>
+      </div>
+      <div class="ride-tip" id="ride-tip"><span class="keycap">W</span><span>TO RIDE</span><span class="tip-divider">·</span><span class="keycap">A</span><span class="keycap">D</span><span>TO STEER</span></div>
+      <button id="pause-button" class="pause-button" aria-label="Pause ride"><span>Ⅱ</span></button>
+    </section>
+
+    <section class="pause-overlay hidden" id="pause-overlay">
+      <div class="pause-panel"><span class="eyebrow"><span></span> TAKE YOUR TIME</span><h2>Take a breath.</h2><p>The road will be here when you're ready.</p><button id="resume-button" class="start-button"><span>Back to the ride</span><b>↗</b></button><div class="pause-controls">W / ↑ <small>ROLL ON</small><span></span> S / ↓ <small>SLOW DOWN</small><span></span> A D / ← → <small>LEAN</small></div></div>
+    </section>
+
+    <div class="bottom-note" id="bottom-note"><span class="sun-icon">◉</span><span>THE GOLDEN HOUR IS YOURS</span><span class="bottom-rule"></span><span>01 / 03</span></div>
+    <div class="mobile-controls" id="mobile-controls"><button data-control="left">←</button><button data-control="brake">−</button><button data-control="gas">+</button><button data-control="right">→</button></div>
+  </main>
+  <script type="module" src="game.js"></script>
+</body>
+</html>
